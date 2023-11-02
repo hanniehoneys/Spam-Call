@@ -5,7 +5,7 @@
 * $pkg update && pkg upgrade -y
 * $pkg install git
 * $pkg install php
-* $git clone [[https://github.com/Exccr/SpamCall](https://github.com/Lyaxpm/Spam-Call)](https://github.com/Lyaxpm/Spam-Call)
+* $git clone https://github.com/Exccr/SpamCall
 * cd Spam-Call
 * php spam.php
 
