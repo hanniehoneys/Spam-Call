@@ -1,5 +1,56 @@
 <?php
 
+class Frey {
+  const URL = 'https://www.freyapp.my.id/api/';
+
+  static $cmd = [
+    'call' => 'spamcall',
+    'wa' => 'spam-wa'
+  ];
+
+  public function spamcall($key, $target, $jumlah) {
+    $loop = 0;
+    while (0 < $jumlah) {
+      $call = Frey::request(self::$cmd['call'], ['target' => $target], $key);
+      $response = json_decode($call, true);
+      if ($response['status'] == true) {
+        echo 'call ke ' . $loop+1 . ' terkirim'. PHP_EOL;
+      } else {
+        echo $response['message'];
+      }
+      sleep(30);
+      $loop++;
+    }
+  }
+
+  public function spamwa($key, $target, $jumlah) {
+    $loop = 0;
+    while (0 < $jumlah) {
+      $call = Frey::request(self::$cmd['wa'], ['target' => $target], $key);
+      $response = json_decode($call, true);
+      if ($response['status'] == true) {
+        echo 'whatsapp ke ' . $loop+1 . ' terkirim' . PHP_EOL;
+      } else {
+        echo $response['message'];
+      }
+      sleep(30);
+      $loop++;
+    }
+  }
+
+  public function request($url, $params, $key) {
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, self::URL . $url);
+    curl_setopt($curl, CURLOPT_POST, 1);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($params));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, ["x-apikey:" . $key]);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    $result = curl_exec($curl);
+    curl_close($curl);
+    return $result;
+  }
+}
+
 echo "
     ____            _____
    / __ \__  ______/ /   |____
@@ -16,81 +67,20 @@ echo "
 **************************************
 \n\n";
 
-function v1($api, $nomer, $jumlah, $delay) {
-  $url = "https://freyapp.my.id/api/call/v1/". $api . "/". $nomer;
-  $loop = 0;
-  while ($loop < $jumlah) {
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    $response = curl_exec($curl);
-    curl_close($curl);
-    $res = json_decode($response, true);
-    if ($res['status'] !== true) {
-      echo $res['message'] . "\n";
-    } else {
-      echo "Spam ke " . $loop + 1 . " berhasil dikirim! \n";
-    }
-    sleep($delay);
-    $loop++;
-  }
-}
-
-function v2($api, $nomer, $jumlah, $delay) {
-  $url = "https://freyapp.my.id/api/call/v2/". $api . "/". $nomer;
-  $loop = 0;
-  while ($loop < $jumlah) {
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    $response = curl_exec($curl);
-    curl_close($curl);
-    $res = json_decode($response, true);
-    if ($res['status'] !== true) {
-      echo $res['message'] . "\n";
-    } else {
-      echo "Spam ke " . $loop + 1 . " berhasil dikirim! \n";
-    }
-    sleep($delay);
-    $loop++;
-  }
-}
-
-function prem($api, $nomer, $jumlah, $delay) {
-  $url = "https://freyapp.my.id/api/call/prem/". $api . "/". $nomer;
-  $loop = 0;
-  while ($loop < $jumlah) {
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    $response = curl_exec($curl);
-    curl_close($curl);
-    $res = json_decode($response, true);
-    if ($res['status'] !== true) {
-      echo $res['message'] . "\n";
-    } else {
-      echo "Spam ke " . $loop + 1 . " berhasil dikirim! \n";
-    }
-    sleep($delay);
-    $loop++;
-  }
-}
-
 echo "Tunggu Sebentar.....!\n";
 
 sleep(2);
 echo "
 \n\n
 <========= - Pilih Versi - ==========>
-1. Spam V1
-2. Spam V2
-3. Spam Premium ( Khusus Premium )
+1. SpamCall
+2. Spam whatsapp
 <========= - Pilih Angka - ==========>
 \n\n";
 
 echo "Pilih Versi : ";
 $tools = trim(fgets(STDIN));
-
+$frey = new Frey();
 
 switch ($tools) {
   case '1':
@@ -98,41 +88,25 @@ switch ($tools) {
     $nomor = trim(fgets(STDIN));
     echo "\nMasukan Jumlah : ";
     $jumlah = trim(fgets(STDIN));
-    echo "\nMasukan jeda : ";
-    $delay = trim(fgets(STDIN));
-    if (!$delay) {
-      $delay = "30";
-    }
     echo "\nMasukan Key : ";
     $key = trim(fgets(STDIN));
-    v1($key, $nomor, $jumlah, $delay);
+    $frey->spamcall($key, $nomor, $jumlah);
     break;
   case '2':
     echo "Masukan Nomor : ";
     $nomor = trim(fgets(STDIN));
     echo "\nMasukan Jumlah : ";
     $jumlah = trim(fgets(STDIN));
-    echo "\nMasukan jeda : ";
-    $delay = trim(fgets(STDIN));
-    if (!$delay) {
-      $delay = "30";
-    }
     echo "\nMasukan Key : ";
     $key = trim(fgets(STDIN));
-    v2($key, $nomor, $jumlah, $delay);
+    $frey->spamwa($key, $nomor, $jumlah);
     break;
-  case '3':
+  default:
     echo "Masukan Nomor : ";
     $nomor = trim(fgets(STDIN));
     echo "\nMasukan Jumlah : ";
     $jumlah = trim(fgets(STDIN));
-    echo "\nMasukan jeda : ";
-    $delay = trim(fgets(STDIN));
-    if (!$delay) {
-      $delay = "30";
-    }
     echo "\nMasukan Key : ";
     $key = trim(fgets(STDIN));
-    prem($key, $nomor, $jumlah, $delay);
-    break;
-}
+    $frey->spamcall($key, $nomor, $jumlah);
+  }
