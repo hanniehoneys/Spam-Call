@@ -101,12 +101,4 @@ switch ($tools) {
     $key = trim(fgets(STDIN));
     $frey->spamwa($key, $nomor, $jumlah);
     break;
-  default:
-    echo "Masukan Nomor : ";
-    $nomor = trim(fgets(STDIN));
-    echo "\nMasukan Jumlah : ";
-    $jumlah = trim(fgets(STDIN));
-    echo "\nMasukan Key : ";
-    $key = trim(fgets(STDIN));
-    $frey->spamcall($key, $nomor, $jumlah);
   }
