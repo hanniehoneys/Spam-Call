@@ -1,7 +1,7 @@
 <?php
 
 class Frey {
-  const URL = 'https://www.freyapp.my.id/api/';
+  const URL = 'https://freyapp.my.id/api/';
 
   static $cmd = [
     'call' => 'spamcall',
@@ -43,7 +43,7 @@ class Frey {
     curl_setopt($curl, CURLOPT_URL, self::URL . $url);
     curl_setopt($curl, CURLOPT_POST, 1);
     curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($params));
-    curl_setopt($curl, CURLOPT_HTTPHEADER, ["x-apikey:" . $key]);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, ["x-apikey: " . $key]);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     $result = curl_exec($curl);
     curl_close($curl);
@@ -80,10 +80,10 @@ echo "
 
 echo "Pilih Versi : ";
 $tools = trim(fgets(STDIN));
-$frey = new Frey();
 
 switch ($tools) {
   case '1':
+    $frey = new Frey();
     echo "Masukan Nomor : ";
     $nomor = trim(fgets(STDIN));
     echo "\nMasukan Jumlah : ";
@@ -93,6 +93,7 @@ switch ($tools) {
     $frey->spamcall($key, $nomor, $jumlah);
     break;
   case '2':
+    $frey = new Frey();
     echo "Masukan Nomor : ";
     $nomor = trim(fgets(STDIN));
     echo "\nMasukan Jumlah : ";
