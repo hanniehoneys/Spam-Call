@@ -14,14 +14,10 @@ class Frey {
     while (0 < $jumlah) {
       $call = Frey::request(self::$cmd['call'], ['target' => $target], $key);
       $response = json_decode($call, true);
-      if(isset($response['status'])) {
       if ($response['status'] == true) {
         echo 'call ke ' . $loop+1 . ' terkirim'. PHP_EOL;
       } else {
         echo $response['message'];
-      }
-      } else {
-        echo 'call ke ' . $loop+1 . ' gagal terkirim'. PHP_EOL;
       }
       sleep(30);
       $loop++;
@@ -33,14 +29,10 @@ class Frey {
     while (0 < $jumlah) {
       $call = Frey::request(self::$cmd['wa'], ['target' => $target], $key);
       $response = json_decode($call, true);
-      if(isset($response['status'])) {
       if ($response['status'] == true) {
         echo 'whatsapp ke ' . $loop+1 . ' terkirim'. PHP_EOL;
       } else {
         echo $response['message'];
-      }
-      } else {
-        echo 'whatsapp ke ' . $loop+1 . ' gagal terkirim'. PHP_EOL;
       }
       sleep(30);
       $loop++;
@@ -48,7 +40,6 @@ class Frey {
   }
 
   public function bank($key, $code = null, $akun = null) {
-    if(isset($response['status'])) {
     if ($akun) {
       $bank = Frey::request(self::$cmd['bank'], ['type' => 'check', 'code' => $code, 'account_number' => $akun], $key);
       $response = json_decode($bank, true);
@@ -69,9 +60,6 @@ class Frey {
       } else {
         echo $response['message'];
       }
-    }
-    } else {
-      echo 'Gagal check bank'. PHP_EOL;
     }
 }
   public function request($url, $params, $key) {
